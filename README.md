@@ -1,7 +1,3 @@
-<div align="center">
-
-<img src="assets/repo-banner.svg" width="100%" alt="STM32F401 MPU9250 I2C IMU">
-
 # STM32F401 + MPU9250 I²C IMU
 
 ### Raw accelerometer & gyroscope acquisition on STM32F401 using STM32 HAL
@@ -12,156 +8,120 @@
 [![Language](https://img.shields.io/badge/Language-Embedded%20C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)](#)
 [![IDE](https://img.shields.io/badge/IDE-STM32CubeIDE-7C3AED?style=for-the-badge)](#)
 
-**Original STM32CubeIDE project preserved + cleaned reusable driver included**
-
 </div>
 
 ---
 
-## 🚀 Project overview
+# STM32F401 MPU9250 I2C IMU
 
-This project reads **accelerometer and gyroscope data from an MPU9250 over I²C** using an STM32F401.
+This project demonstrates communication between an STM32F401 microcontroller and an MPU9250 IMU sensor using I2C.
 
-The original STM32CubeIDE project:
+The STM32 reads raw accelerometer and gyroscope data from the MPU9250, reconstructs the 16-bit sensor values, and makes the readings available for debugging or further embedded-system processing.
 
-- configures `I2C1`;
-- wakes the MPU9250;
-- selects **±2 g** accelerometer range;
-- selects **±250 °/s** gyroscope range;
-- performs a **14-byte burst read** beginning at register `0x3B`;
-- extracts raw `X/Y/Z` acceleration and angular-rate values;
-- repeats the acquisition every **100 ms**.
+## Project Overview
 
-The archived project build completed with **0 errors and 0 warnings**.
+The project was developed in STM32CubeIDE using STM32 HAL.
 
-> **Scope note:** the MPU9250 contains a magnetometer too, but the original project only reads the accelerometer and gyroscope. This repository keeps that scope clear instead of claiming unused sensor features.
+Main functions of the project:
 
----
+- Initialize I2C1 on the STM32F401
+- Initialize and wake the MPU9250
+- Configure the accelerometer to ±2 g
+- Configure the gyroscope to ±250 degrees/second
+- Read accelerometer X, Y and Z values
+- Read gyroscope X, Y and Z values
+- Read the complete 14-byte sensor data block
+- Repeat sensor acquisition every 100 ms
+- Display raw values using `printf()`
 
-## 🧠 System architecture
+## Hardware Used
 
-<img src="assets/system-architecture.svg" width="100%" alt="System architecture">
+- STM32F401 microcontroller
+- MPU9250 IMU sensor
+- Jumper wires
+- USB/debug connection
+- STM32CubeIDE
+
+## I2C Connection
+
+| Connection | Pin / Value |
+|---|---|
+| I2C1 SCL | PB6 |
+| I2C1 SDA | PB7 |
+| MPU9250 address | 0x68 |
+| I2C speed | 100 kHz |
+
+The exact power connection depends on the MPU9250 breakout board being used.
+
+## System Flow
 
 ```text
 MPU9250
-   │
-   │  I²C @ 100 kHz
-   │  SDA / SCL
-   ▼
+   |
+   | I2C
+   |
 STM32F401
-   │
-   ├── 14-byte burst read
-   │
-   ├── Accel X / Y / Z
-   ├── Gyro  X / Y / Z
-   └── Temperature register
-   │
-   ▼
-Application / Debug Output
+   |
+   |-- Accelerometer X, Y, Z
+   |-- Gyroscope X, Y, Z
+   |-- Temperature register
+   |
+   v
+Raw Sensor Values
+   |
+   v
+Debug / Further Processing
 ```
 
----
+## MPU9250 Configuration
 
-## ⚙️ Original CubeMX configuration
-
-| Setting | Original project |
-|---|---|
-| STM32 target | `STM32F401C(D-E)Ux` |
-| Package | `UFQFPN48` |
-| System clock | `16 MHz` HSI |
-| Peripheral | `I2C1` |
-| I²C speed | `100 kHz` |
-| SCL | `PB6` |
-| SDA | `PB7` |
-| MPU9250 7-bit address | `0x68` |
-| Accelerometer range | `±2 g` |
-| Gyroscope range | `±250 °/s` |
-| Original loop delay | `100 ms` |
-
-The exact CubeMX configuration is preserved in:
+The original project configures:
 
 ```text
-original_source/STM32F401CE.ioc
+Accelerometer range : ±2 g
+Gyroscope range     : ±250 degrees/second
+I2C address         : 0x68
+I2C speed           : 100 kHz
+Main loop delay     : 100 ms
 ```
 
----
-
-## 🔩 Wiring
-
-<img src="assets/wiring.svg" width="100%" alt="STM32F401 to MPU9250 wiring">
-
-| MPU9250 | STM32F401 |
-|---|---|
-| `VCC` | Use the supply required by your breakout board |
-| `GND` | `GND` |
-| `SCL` | `PB6` (`I2C1_SCL`) |
-| `SDA` | `PB7` (`I2C1_SDA`) |
-| `AD0` | Low for address `0x68` |
-
-> Breakout boards differ. Confirm the module's regulator/logic-level requirements before powering it.
-
----
-
-## 📡 Register flow
-
-<img src="assets/register-flow.svg" width="100%" alt="MPU9250 register flow">
-
-The original driver uses:
+## Important Registers
 
 | Register | Address | Purpose |
 |---|---:|---|
-| `PWR_MGMT_1` | `0x6B` | Wake the sensor |
-| `GYRO_CONFIG` | `0x1B` | Select gyro full-scale range |
-| `ACCEL_CONFIG` | `0x1C` | Select accel full-scale range |
-| `ACCEL_XOUT_H` | `0x3B` | Start of 14-byte sensor-data block |
+| PWR_MGMT_1 | 0x6B | Wake the MPU9250 |
+| GYRO_CONFIG | 0x1B | Configure gyroscope range |
+| ACCEL_CONFIG | 0x1C | Configure accelerometer range |
+| ACCEL_XOUT_H | 0x3B | Start of sensor data block |
+| WHO_AM_I | 0x75 | Verify MPU9250 identity |
 
-The cleaned driver additionally checks:
+## Reading Sensor Data
 
-| Register | Address | Expected |
-|---|---:|---:|
-| `WHO_AM_I` | `0x75` | `0x71` for MPU9250 |
-
----
-
-## 📦 14-byte sensor frame
-
-Starting from `0x3B`, the sensor data block is:
+The project reads 14 bytes starting from register `0x3B`.
 
 ```text
-Byte  0–1   ACCEL_X
-Byte  2–3   ACCEL_Y
-Byte  4–5   ACCEL_Z
-Byte  6–7   TEMPERATURE
-Byte  8–9   GYRO_X
-Byte 10–11  GYRO_Y
-Byte 12–13  GYRO_Z
+Byte 0-1    Accelerometer X
+Byte 2-3    Accelerometer Y
+Byte 4-5    Accelerometer Z
+Byte 6-7    Temperature
+Byte 8-9    Gyroscope X
+Byte 10-11  Gyroscope Y
+Byte 12-13  Gyroscope Z
 ```
 
-Each measurement is reconstructed as a signed 16-bit value:
+Each high and low byte pair is combined into a signed 16-bit value.
+
+Example:
 
 ```c
-(int16_t)(((uint16_t)high_byte << 8U) | low_byte)
+accel[0] = (int16_t)((buffer[0] << 8) | buffer[1]);
+accel[1] = (int16_t)((buffer[2] << 8) | buffer[3]);
+accel[2] = (int16_t)((buffer[4] << 8) | buffer[5]);
 ```
 
----
+## Main Program Flow
 
-## 🧮 Raw → engineering units
-
-The cleaned driver keeps the original full-scale settings and can convert the raw values:
-
-```text
-Acceleration (g) = raw / 16384
-Gyroscope (°/s)  = raw / 131
-Temperature (°C) = raw / 333.87 + 21
-```
-
-These conversion factors correspond to the ranges configured in this repository.
-
----
-
-## 💻 Original application flow
-
-The preserved `main.c` performs:
+The original project follows this structure:
 
 ```c
 MPU9250_Init();
@@ -180,30 +140,18 @@ while (1)
 }
 ```
 
-`printf()` is present in the original source. Where those characters appear depends on the project's retargeting/debug configuration.
+## Clean Driver Included
 
----
+The repository also contains a cleaned reusable MPU9250 driver under `firmware/`.
 
-## ✨ Clean reusable driver
+It includes:
 
-A cleaner version is provided under:
-
-```text
-firmware/Core/Inc/mpu9250.h
-firmware/Core/Src/mpu9250.c
-```
-
-It adds:
-
-- `WHO_AM_I` verification;
-- explicit HAL error handling;
-- null-pointer checks;
-- named register constants;
-- raw-data structure;
-- engineering-unit structure;
-- accelerometer conversion to `g`;
-- gyroscope conversion to `°/s`;
-- temperature conversion to `°C`.
+- WHO_AM_I verification
+- HAL I2C error handling
+- Raw-data structure
+- Accelerometer conversion to g
+- Gyroscope conversion to degrees/second
+- Temperature conversion to Celsius
 
 Example:
 
@@ -220,126 +168,85 @@ if (MPU9250_Init(&hi2c1) == MPU9250_OK)
 }
 ```
 
----
+## Raw Value Conversion
 
-## 📁 Repository structure
+For the configured ranges:
+
+```text
+Acceleration (g) = raw / 16384
+Gyroscope (dps)  = raw / 131
+Temperature (C)  = raw / 333.87 + 21
+```
+
+## Repository Structure
 
 ```text
 STM32F401-MPU9250-I2C-IMU/
-│
-├── README.md
-├── GITHUB_SETUP.md
-├── STM32CUBEIDE_SETUP.md
-├── .gitignore
-│
-├── original_source/
-│   ├── STM32F401CE.ioc
-│   ├── Core/
-│   │   ├── Inc/
-│   │   ├── Src/
-│   │   └── Startup/
-│   └── *.ld
-│
-├── firmware/
-│   └── Core/
-│       ├── Inc/
-│       │   └── mpu9250.h
-│       └── Src/
-│           ├── mpu9250.c
-│           └── main_integration_example.c
-│
-├── docs/
-│   ├── ORIGINAL_PROJECT_NOTES.md
-│   ├── BUILD_STATUS.md
-│   └── TESTING_CHECKLIST.md
-│
-├── examples/
-│   └── expected_output_format.txt
-│
-└── assets/
-    ├── repo-banner.svg
-    ├── system-architecture.svg
-    ├── wiring.svg
-    └── register-flow.svg
+|
+|-- README.md
+|-- GITHUB_SETUP.md
+|-- STM32CUBEIDE_SETUP.md
+|-- .gitignore
+|
+|-- original_source/
+|   |-- STM32F401CE.ioc
+|   `-- Core/
+|       |-- Inc/
+|       |-- Src/
+|       `-- Startup/
+|
+|-- firmware/
+|   `-- Core/
+|       |-- Inc/
+|       |   `-- mpu9250.h
+|       `-- Src/
+|           |-- mpu9250.c
+|           `-- main_integration_example.c
+|
+|-- docs/
+|   |-- ORIGINAL_PROJECT_NOTES.md
+|   |-- BUILD_STATUS.md
+|   `-- TESTING_CHECKLIST.md
+|
+`-- examples/
+    `-- expected_output_format.txt
 ```
 
----
+## Original Source
 
-## 🛠️ Build the original project
+The complete original STM32CubeIDE source is preserved inside:
 
-Open:
+```text
+original_source/
+```
+
+The original CubeMX configuration file is:
 
 ```text
 original_source/STM32F401CE.ioc
 ```
 
-in STM32CubeIDE / STM32CubeMX.
-
-If HAL/CMSIS generated files are missing in your environment, regenerate the code from the `.ioc`, then keep the original `Core/Src/mpu9250.c` and `Core/Inc/mpu9250.h`.
-
-For a cleaner integration, copy the driver from `firmware/` instead.
-
-Detailed instructions:
-
-**[`STM32CUBEIDE_SETUP.md`](STM32CUBEIDE_SETUP.md)**
-
----
-
-## ✅ Original build status
+Original project build status:
 
 ```text
-STM32CubeIDE incremental build
-Errors   : 0
-Warnings : 0
+Errors: 0
+Warnings: 0
 ```
 
-This status belongs to the archived original `STM32F401CE` project.
+## STM32CubeIDE Setup
 
-The cleaned driver was prepared from the same register flow, but real-hardware execution of the cleaned version was not performed while packaging this repository.
-
----
-
-## 🧪 Suggested hardware checks
-
-Before considering a run successful:
-
-- `WHO_AM_I` returns `0x71`;
-- I²C transactions return `HAL_OK`;
-- acceleration changes when the board is tilted;
-- gyro values react when the board is rotated;
-- at rest, one acceleration axis is typically dominated by gravity depending on orientation;
-- data changes without repeatedly saturating at signed 16-bit limits.
-
----
-
-## 🧰 Technologies demonstrated
-
-`STM32F401` · `STM32CubeIDE` · `STM32 HAL` · `Embedded C` · `I²C` · `MPU9250` · `IMU` · `Sensor Registers` · `Firmware Debugging`
-
----
-
-## 📌 Why this project is useful
-
-This repository demonstrates the low-level path from a physical IMU to firmware data:
+Open the `.ioc` file in STM32CubeIDE and verify:
 
 ```text
-Sensor register
-      ↓
-I²C transaction
-      ↓
-Byte buffer
-      ↓
-Signed 16-bit values
-      ↓
-Physical units
-      ↓
-Application logic
+PB6 -> I2C1_SCL
+PB7 -> I2C1_SDA
+I2C speed -> 100 kHz
 ```
 
-That same pattern is reusable in robotics, attitude sensing, embedded telemetry, balancing systems, and flight-control experiments.
+Detailed setup instructions are available in `STM32CUBEIDE_SETUP.md`.
 
----
+## Notes
 
-## 📄 License
+The MPU9250 also contains a magnetometer, but this project only uses the accelerometer and gyroscope.
 
-No license is included by default.
+The original source is kept separate from the cleaned driver so the original implementation remains preserved.
