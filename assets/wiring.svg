@@ -13,12 +13,12 @@
   <text class="t" x="135" y="250">GND</text>
   <text class="t" x="135" y="295">AD0</text>
 
-  <rect class="box" x="900" y="55" width="420" height="250" rx="20"/>
-  <text class="h" x="1110" y="105">STM32F401</text>
-  <text class="t" x="1175" y="160">PB6 / I2C1_SCL</text>
-  <text class="t" x="1175" y="205">PB7 / I2C1_SDA</text>
-  <text class="t" x="1175" y="250">GND</text>
-  <text class="t" x="1175" y="295">Logic Low → 0x68</text>
+  <rect class="box" x="600" y="55" width="420" height="250" rx="20"/>
+  <text class="h" x="800" y="105">STM32F401</text>
+  <text class="t" x="800" y="160">PB6 / I2C1_SCL</text>
+  <text class="t" x="800" y="205">PB7 / I2C1_SDA</text>
+  <text class="t" x="800" y="250">GND</text>
+  <text class="t" x="800" y="295">Logic Low → 0x68</text>
 
   <path class="wire" d="M220 153H900"/>
   <path class="wire" d="M220 198H900"/>
