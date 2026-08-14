@@ -1,0 +1,7 @@
+The original main.c prints raw values in this format:
+
+Accel: X=<raw>, Y=<raw>, Z=<raw>
+Gyro: X=<raw>, Y=<raw>, Z=<raw>
+
+The repository does not include a captured terminal log from the original hardware run,
+so no specific numeric readings are claimed here.

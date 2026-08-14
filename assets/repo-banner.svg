@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="390" viewBox="0 0 1400 390">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06131e"/>
+      <stop offset="0.52" stop-color="#0b1f32"/>
+      <stop offset="1" stop-color="#101827"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1400" height="390" rx="30" fill="url(#bg)"/>
+  <g opacity=".11" stroke="#38bdf8">
+    <path d="M0 65H1400M0 130H1400M0 195H1400M0 260H1400M0 325H1400"/>
+    <path d="M100 0V390M300 0V390M500 0V390M700 0V390M900 0V390M1100 0V390M1300 0V390"/>
+  </g>
+
+  <text x="70" y="88" fill="#38bdf8" font-family="monospace" font-size="25" font-weight="700">STM32F401 • MPU9250 • I²C1 • EMBEDDED C</text>
+  <text x="70" y="172" fill="#ffffff" font-family="Arial, sans-serif" font-size="62" font-weight="800">MPU9250 I²C IMU</text>
+  <text x="72" y="226" fill="#a9bed0" font-family="monospace" font-size="22">14-BYTE BURST READ → ACCEL XYZ → GYRO XYZ → PHYSICAL UNITS</text>
+  <rect x="72" y="270" width="690" height="6" rx="3" fill="url(#cyan)" filter="url(#glow)"/>
+
+  <g transform="translate(1005 66)">
+    <rect x="0" y="0" width="245" height="245" rx="28" fill="#0d2538" stroke="#22d3ee" stroke-width="4"/>
+    <rect x="62" y="55" width="120" height="120" rx="16" fill="#07121d" stroke="#38bdf8" stroke-width="4"/>
+    <text x="122" y="112" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="26" font-weight="700">IMU</text>
+    <text x="122" y="143" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="19">9250</text>
+    <g stroke="#38bdf8" stroke-width="5">
+      <path d="M20 72H62M20 110H62M20 148H62M20 186H62"/>
+      <path d="M182 72H225M182 110H225M182 148H225M182 186H225"/>
+    </g>
+  </g>
+</svg>

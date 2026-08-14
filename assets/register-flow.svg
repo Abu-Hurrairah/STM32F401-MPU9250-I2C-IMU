@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="290" viewBox="0 0 1400 290">
+  <rect width="1400" height="290" rx="26" fill="#0b1220"/>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#22d3ee"/>
+    </marker>
+  </defs>
+  <style>
+    .b{fill:#111c2d;stroke:#38bdf8;stroke-width:2}
+    .n{fill:#fff;font:700 21px monospace;text-anchor:middle}
+    .s{fill:#9fb3c8;font:15px monospace;text-anchor:middle}
+    .a{stroke:#22d3ee;stroke-width:4;fill:none;marker-end:url(#arr)}
+  </style>
+  <rect class="b" x="35" y="70" width="235" height="140" rx="16"/>
+  <text class="n" x="152" y="122">WHO_AM_I</text><text class="s" x="152" y="155">0x75 → 0x71</text>
+  <path class="a" d="M270 140H315"/>
+  <rect class="b" x="315" y="70" width="235" height="140" rx="16"/>
+  <text class="n" x="432" y="122">WAKE</text><text class="s" x="432" y="155">0x6B ← 0x00</text>
+  <path class="a" d="M550 140H595"/>
+  <rect class="b" x="595" y="70" width="235" height="140" rx="16"/>
+  <text class="n" x="712" y="122">ACCEL</text><text class="s" x="712" y="155">0x1C ← ±2g</text>
+  <path class="a" d="M830 140H875"/>
+  <rect class="b" x="875" y="70" width="235" height="140" rx="16"/>
+  <text class="n" x="992" y="122">GYRO</text><text class="s" x="992" y="155">0x1B ← ±250dps</text>
+  <path class="a" d="M1110 140H1155"/>
+  <rect class="b" x="1155" y="70" width="210" height="140" rx="16"/>
+  <text class="n" x="1260" y="122">READ</text><text class="s" x="1260" y="155">0x3B • 14 bytes</text>
+</svg>

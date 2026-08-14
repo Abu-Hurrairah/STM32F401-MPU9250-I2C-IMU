@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="300" viewBox="0 0 1400 300">
+  <rect width="1400" height="300" rx="26" fill="#0b1220"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#22d3ee"/>
+    </marker>
+  </defs>
+  <style>
+    .b{fill:#111c2d;stroke:#22d3ee;stroke-width:3}
+    .t{fill:#ffffff;font:700 24px monospace;text-anchor:middle}
+    .s{fill:#9fb3c8;font:17px monospace;text-anchor:middle}
+    .a{stroke:#22d3ee;stroke-width:5;fill:none;marker-end:url(#arrow)}
+  </style>
+
+  <rect class="b" x="45" y="70" width="280" height="155" rx="18"/>
+  <text class="t" x="185" y="128">MPU9250</text>
+  <text class="s" x="185" y="164">Accel + Gyro</text>
+  <text class="s" x="185" y="192">I²C address 0x68</text>
+
+  <path class="a" d="M325 148H470"/>
+  <text class="s" x="397" y="123">I²C1</text>
+  <text class="s" x="397" y="176">PB6 / PB7</text>
+
+  <rect class="b" x="470" y="70" width="320" height="155" rx="18"/>
+  <text class="t" x="630" y="128">STM32F401</text>
+  <text class="s" x="630" y="164">HAL I²C read</text>
+  <text class="s" x="630" y="192">14-byte buffer</text>
+
+  <path class="a" d="M790 148H930"/>
+
+  <rect class="b" x="930" y="70" width="425" height="155" rx="18"/>
+  <text class="t" x="1142" y="122">APPLICATION DATA</text>
+  <text class="s" x="1142" y="161">Raw int16_t XYZ</text>
+  <text class="s" x="1142" y="191">g • °/s • °C</text>
+</svg>
